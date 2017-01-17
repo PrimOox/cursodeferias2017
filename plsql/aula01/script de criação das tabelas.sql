@@ -126,3 +126,11 @@
 
   ALTER TABLE "SYSTEM"."JOGADOR" ADD CONSTRAINT "FK_TIME_JOGADOR" FOREIGN KEY ("ID_TIME")
 	  REFERENCES "SYSTEM"."TIME" ("ID_TIME") ENABLE;
+	  
+--------------------------------------------------------
+-- Comentários
+--------------------------------------------------------
+
+comment on table time is '[Cadastro] Tabela para armazenamento de times.';
+comment on column time.id_time is 'Codigo identificador do time.';
+comment on column time.nome is 'Nome do time.';
