@@ -1,6 +1,19 @@
 --------------------------------------------------------
---  Arquivo criado - Segunda-feira-Janeiro-16-2017   
+--  DDL for Table JOGADOR
 --------------------------------------------------------
+
+  CREATE TABLE "SYSTEM"."JOGADOR" 
+   (	"ID_JOGADOR" NUMBER, 
+	"NOME" VARCHAR2(400 BYTE), 
+	"DT_NASCIMENTO" DATE, 
+	"SALARIO" NUMBER(18,2), 
+	"ID_TIME" NUMBER
+   ) PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "SYSTEM" ;
 --------------------------------------------------------
 --  DDL for Table TIME
 --------------------------------------------------------
@@ -14,6 +27,10 @@
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "SYSTEM" ;
+
+   COMMENT ON COLUMN "SYSTEM"."TIME"."ID_TIME" IS 'Codigo identificador do time.';
+   COMMENT ON COLUMN "SYSTEM"."TIME"."NOME" IS 'Nome do time.';
+   COMMENT ON TABLE "SYSTEM"."TIME"  IS '[Cadastro] Tabela para armazenamento de times.';
 --------------------------------------------------------
 --  DDL for Table TECNICO
 --------------------------------------------------------
@@ -31,17 +48,11 @@
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "SYSTEM" ;
 --------------------------------------------------------
---  DDL for Table JOGADOR
+--  DDL for Index PK_JOGADOR
 --------------------------------------------------------
 
-  CREATE TABLE "SYSTEM"."JOGADOR" 
-   (	"ID_JOGADOR" NUMBER, 
-	"NOME" VARCHAR2(400 BYTE), 
-	"DT_NASCIMENTO" DATE, 
-	"SALARIO" NUMBER(18,2), 
-	"ID_TIME" NUMBER
-   ) PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
- NOCOMPRESS LOGGING
+  CREATE UNIQUE INDEX "SYSTEM"."PK_JOGADOR" ON "SYSTEM"."JOGADOR" ("ID_JOGADOR") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
@@ -67,15 +78,19 @@
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "SYSTEM" ;
 --------------------------------------------------------
---  DDL for Index PK_JOGADOR
+--  Constraints for Table JOGADOR
 --------------------------------------------------------
 
-  CREATE UNIQUE INDEX "SYSTEM"."PK_JOGADOR" ON "SYSTEM"."JOGADOR" ("ID_JOGADOR") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  ALTER TABLE "SYSTEM"."JOGADOR" ADD CONSTRAINT "PK_JOGADOR" PRIMARY KEY ("ID_JOGADOR")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
+  TABLESPACE "SYSTEM"  ENABLE;
+  ALTER TABLE "SYSTEM"."JOGADOR" MODIFY ("ID_TIME" NOT NULL ENABLE);
+  ALTER TABLE "SYSTEM"."JOGADOR" MODIFY ("DT_NASCIMENTO" NOT NULL ENABLE);
+  ALTER TABLE "SYSTEM"."JOGADOR" MODIFY ("NOME" NOT NULL ENABLE);
+  ALTER TABLE "SYSTEM"."JOGADOR" MODIFY ("ID_JOGADOR" NOT NULL ENABLE);
 --------------------------------------------------------
 --  Constraints for Table TIME
 --------------------------------------------------------
@@ -101,36 +116,14 @@
   ALTER TABLE "SYSTEM"."TECNICO" MODIFY ("NOME" NOT NULL ENABLE);
   ALTER TABLE "SYSTEM"."TECNICO" MODIFY ("ID_TECNICO" NOT NULL ENABLE);
 --------------------------------------------------------
---  Constraints for Table JOGADOR
+--  Ref Constraints for Table JOGADOR
 --------------------------------------------------------
 
-  ALTER TABLE "SYSTEM"."JOGADOR" ADD CONSTRAINT "PK_JOGADOR" PRIMARY KEY ("ID_JOGADOR")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM"  ENABLE;
-  ALTER TABLE "SYSTEM"."JOGADOR" MODIFY ("ID_TIME" NOT NULL ENABLE);
-  ALTER TABLE "SYSTEM"."JOGADOR" MODIFY ("DT_NASCIMENTO" NOT NULL ENABLE);
-  ALTER TABLE "SYSTEM"."JOGADOR" MODIFY ("NOME" NOT NULL ENABLE);
-  ALTER TABLE "SYSTEM"."JOGADOR" MODIFY ("ID_JOGADOR" NOT NULL ENABLE);
+  ALTER TABLE "SYSTEM"."JOGADOR" ADD CONSTRAINT "FK_TIME_JOGADOR" FOREIGN KEY ("ID_TIME")
+	  REFERENCES "SYSTEM"."TIME" ("ID_TIME") ENABLE;
 --------------------------------------------------------
 --  Ref Constraints for Table TECNICO
 --------------------------------------------------------
 
   ALTER TABLE "SYSTEM"."TECNICO" ADD CONSTRAINT "FK_TIME_TECNICO" FOREIGN KEY ("ID_TIME")
 	  REFERENCES "SYSTEM"."TIME" ("ID_TIME") ENABLE;
---------------------------------------------------------
---  Ref Constraints for Table JOGADOR
---------------------------------------------------------
-
-  ALTER TABLE "SYSTEM"."JOGADOR" ADD CONSTRAINT "FK_TIME_JOGADOR" FOREIGN KEY ("ID_TIME")
-	  REFERENCES "SYSTEM"."TIME" ("ID_TIME") ENABLE;
-	  
---------------------------------------------------------
--- Comentários
---------------------------------------------------------
-
-comment on table time is '[Cadastro] Tabela para armazenamento de times.';
-comment on column time.id_time is 'Codigo identificador do time.';
-comment on column time.nome is 'Nome do time.';
